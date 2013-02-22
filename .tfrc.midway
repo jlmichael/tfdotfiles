@@ -1,0 +1,11 @@
+/def -p0 -mregexp -t'The captain announces: Welcome to Midway Space Station' midwayshuttletospace = exit%;
+/def -p0 -mregexp -t'The captain announces: Welcome to Houston' houstontoguild = exit%;d%;d%;out%;/sciencetoguild%;e%;u%;u%;n%;n%;e%;admit myself
+/def exittomidwayshuttle = slide science%;enter%;u%;u%;board shuttle%;
+/def infirmarytoshuttle = /infirmarytoexit%;/exittomidwayshuttle%;
+
+/def -p0 -mregexp -t'The shuttle drops into the landing area with a loud boom' board = board shuttle
+
+
+;/def -p0 -mregexp -t'legs run away with you' goback = coreward%;coreward%;coreward%;d%;d%;d%;d%;/spacetoshuttle
+/def -p0 -mregexp -t'all of your wounds have' gomidway = /infirmarytoshuttle
+

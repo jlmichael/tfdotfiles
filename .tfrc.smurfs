@@ -1,0 +1,40 @@
+/def start = /set target brainy%;/set incombat no%;am
+
+/def -p0 -mregexp -t'legs run away with you' lookafterrun = wimpy 0%;/eval /repeat -$[rand(1000,2500)/1000] 1 l
+/def -p0 -mregexp -t'all of your wounds' donehealing = /set healing no%;wimpy 47%;edna%;/eval /infto$[target]%;/if (incombat =~ "no") /eval kill $[target]%;/set incombat yes%; /endif
+/def inftosmurfs = /infirmarytoexit%;slide chaos%;enter%;e%;s%;
+/def smurfstoinf = n%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;admit myself%;/set healing yes
+/def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
+
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Brainy' gotbrainy = /set target smelly%;/set incombat no%;/brainytoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Smelly' gotsmelly = /set target papa%;/set incombat no%;/smellytoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Papa' gotpapa = /set target vanity%;/set incombat no%;/papatoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Vanity' gotvanity = /set target smurfette%;/set incombat no%;/vanitytoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Smurfette' gotsmurfette = /set target jokey%;/set incombat no%;/smurfettetoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Jokey' gotjokey = /set target brainy%;/set incombat no%;/jokeytoinf
+
+/def inftobrainy = /inftosmurfs%;s
+/def inftosmelly = /inftobrainy%;s
+/def inftopapa = /inftosmelly%;s
+/def inftovanity = /inftopapa%;w
+/def inftosmurfette = /inftopapa%;e
+/def inftojokey = /inftopapa%;s
+
+/def brainytoinf = n%;/smurfstoinf
+/def smellytoinf = n%;/brainytoinf
+/def papatoinf = n%;/smellytoinf
+/def vanitytoinf = e%;/papatoinf
+/def smurfettetoinf = w%;/papatoinf
+/def jokeytoinf = n%;/papatoinf
+/def handytoinf = e%;/jokeytoinf
+/def clumsytoinf = w%;/jokeytoinf
+
+/def -p0 -mregexp -t'^You seem to be in some sort of forest. The trees look like large mushrooms.' fromentry = /smurfstoinf
+/def -p0 -mregexp -t'^This looks like a regular forest, except everything is so large, even the' frombrainy = /brainytoinf
+/def -p0 -mregexp -t'^large mushrooms, and there are stone paths leading off' fromsmelly = /smellytoinf
+/def -p0 -mregexp -t'^large mushrooms. You see a well and stone paths' frompapa = /papatoinf
+/def -p0 -mregexp -t'don\'t taste very good, because there\'s a lot of monsters in the forest that' fromjokey = /jokeytoinf
+/def -p0 -mregexp -t'^dressing table over to the west' fromvanity = /vanitytoinf
+/def -p0 -mregexp -t'^This is one of the larger and nicer homes on the street' fromsmurfette = /smurfettetoinf
+/def -p0 -mregexp -t'^This house looks more like a workshed. Tools lay all over the floor. There' fromhandy = /handytoinf
+/def -p0 -mregexp -t'^being so very large. There appears to be a very large rock blocking the well' fromclumsy = /clumsytoinf

@@ -1,0 +1,27 @@
+/addworld -Tlp 3K 3k.org 3000
+/set status_fields=hpbar hpbar:30
+/def -p0 -ag -mregexp -t'^H\\:.*$' hptracker = /set hpbar %P0
+/def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = gac%;pab%;/sys echo "You killed %P1!" >> /tmp/mudfeedbot
+
+/def chaostoguild = s%;e%;e%;s%;s%;s%;s%;s%;s%;s%;se%;activate pillar
+/def sciencetoguild = w%;w%;s%;s%;s%;s%;se%;activate pillar%;
+/def fantasytoguild = e%;e%;e%;s%;e%;e%;e%;e%;s%;s%;s%;se%;activate pillar%;
+/def chaostoinf = /chaostoguild%;/exittoinf
+/def sciencetoinf = /sciencetoguild%;/exittoinf
+/def fantasytoinf = /fantasytoguild%;/exittoinf
+
+/def exittoinf = e%;u%;u%;n%;n%;e%;admit myself
+/def infirmarytoexit = w%;s%;s%;d%;d%;w%;
+
+/def guildtochessboard = /guildtochaos%;enter%;e%;climb%;w%;w%;w%;s%;s%;s%;
+
+/def -p0 -mregexp -t'with needles and scalpels. You begin to feel better' recharge = recharge
+
+;write stuff to IRC bot
+/def -p0 -F -mregexp -t'([a-zA-Z]+) tells you: (.*)$' reporttell = /sys echo "%P1 told you: %P2" >> /tmp/mudfeedbot%;
+/def -p0 -F -mregexp -t'You died.' reportdeath = /sys echo "You might have died!" >> /tmp/mudfeedbot%;
+/def -p0 -F -mregexp -t'Stippytobin' reportstippy = /sys echo "Someone stippy'd!" >> /tmp/mudfeedbot%;
+/def -p0 -F -mregexp -t'([a-zA-Z]+) \[Gen-Alpha\] : (.*)$' reportcomm = /sys echo "%P1 comm: %P2" >> /tmp/mudfeedbot%;
+
+/def fromfile = /quote -dexec !"cat /tmp/deeftobdum"%;
+/repeat -5 1 /fromfile

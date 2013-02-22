@@ -1,0 +1,50 @@
+/def start = /infto5%;trace pattern%;/set target 5%;/set incombat yes%;edna%;/set healing no%;k druid
+
+/def inftocopse = /infirmarytoexit%;slide fantasy%;enter%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;leave%;e%;e%;e%;e%;e%;trail%;
+/def copsetoinf = trail%;w%;w%;w%;w%;w%;enter%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;portal%;/fantasytoguild%;e%;u%;u%;n%;n%;e%;admit myself%;/set healing yes
+/def -p0 -mregexp -t'legs run away with you' lookafterrun = wimpy 0%;/eval /repeat -$[rand(1000,2500)/1000] 1 l
+/def -p0 -mregexp -t'all of your wounds' donehealing = /set healing no%;wimpy 47%;edna%;/eval /infto$[target]%;/if (incombat =~ "no") /eval kill druid%;/set incombat yes%; /endif
+/def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
+/def -p0 -mregexp -t'Gentimer Has Expired' startover = l%;/eval /repeat -$[rand(5000,6000)/1000] 1 /start
+
+/def infto1 = /inftocopse%;se
+/def infto2 = /infto1%;e
+/def infto3 = /infto2%;e
+/def infto4 = /infto1%;s
+/def infto5 = /infto9%;nw
+/def infto6 = /infto3%;s
+/def infto7 = /infto4%;s
+/def infto8 = /infto7%;e
+/def infto9 = /infto8%;e
+
+/def 1toinf = nw%;/copsetoinf
+/def 2toinf = w%;/1toinf
+/def 3toinf = w%;/2toinf
+/def 4toinf = n%;/1toinf
+/def 5toinf = se%;/9toinf
+/def 6toinf = n%;/3toinf
+/def 7toinf = n%;/4toinf
+/def 8toinf = w%;/7toinf
+/def 9toinf = w%;/8toinf
+
+/def -p0 -mregexp -t'^You\'ve come to a strangely quiet clearing in the forest' fromentry = /copsetoinf
+/def -p0 -mregexp -t'^You are in the NW section of a quiet' from1 = /1toinf
+/def -p0 -mregexp -t'^You are at the northern edge of the clearing' from2 = /2toinf
+/def -p0 -mregexp -t'^You have come to the NE corner of this' from3 = /3toinf
+/def -p0 -mregexp -t'^Now _THIS_ is a strange place' from4 = /4toinf
+/def -p0 -mregexp -t'^At the center of the clearing' from5 = /5toinf
+/def -p0 -mregexp -t'^You have arrived at the eastern side of the clearing' from6 = /6toinf
+/def -p0 -mregexp -t'^This SW corner of the clearing feels' from7 = /7toinf
+/def -p0 -mregexp -t'^As soon as you come to this southern edge' from8 = /8toinf
+/def -p0 -mregexp -t'^You very nearly have to hack your way through' from9 = /9toinf
+
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Hen Dallpen' got1 = /set target 2%;/set incombat no%;/1toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Torach' got2 = /set target 3%;/set incombat no%;/2toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Brgwin' got3 = /set target 4%;/set incombat no%;/3toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Baach' got4 = /set target 5%;/set incombat no%;/4toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Taliesin' got5 = /set target 6%;/set incombat no%;/5toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Megellau' got6 = /set target 7%;/set incombat no%;/6toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Maelwys' got7 = /set target 8%;/set incombat no%;/7toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Twrch' got8 = /set target 9%;/set incombat no%;/8toinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Gorswyn' got9 = /set target 1%;/set incombat no%;/9toinf
+

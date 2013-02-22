@@ -1,0 +1,22 @@
+/def -p0 -mregexp -t'The captain announces: Welcome to Midway Space Station' midwayshuttletospace = exit%;w%;w%;w%;w%;descend%;descend%;w%;s%;enter pod%;
+/def -p0 -mregexp -t'The captain announces: Welcome to Houston' houstontoguild = exit%;d%;d%;out%;/sciencetoguild%;e%;u%;u%;n%;n%;e%;admit myself
+/def exittomidwayshuttle = slide science%;enter%;u%;u%;board shuttle%;
+/def infirmarytoshuttle = /infirmarytoexit%;/exittomidwayshuttle%;
+
+/def -p0 -mregexp -t'The shuttle drops into the landing area with a loud boom' board = board shuttle
+
+/def spacetojupe = edna%;u%;u%;u%;u%;outward%;outward%;outward%;upspin
+/def spacetovenus = edna%;u%;u%;u%;coreward%;downspin
+/def spacetosaturn = edna%;u%;u%;u%;outward%;outward%;outward%;outward%;upspin
+/def spacetopluto = u%;u%;u%;outward%;outward%;outward%;outward%;outward%;outward%;edna%;outward
+/def spacetoblackhole = u%;u%;u%;outward%;outward%;outward%;outward%;outward%;outward%;us%;edna%;us
+/def jupiterruntoshuttle = coreward%;coreward%;coreward%;d%;d%;d%;d%;/spacetoshuttle
+/def venusruntoshuttle = outward%;d%;d%;d%;d%;/spacetoshuttle
+/def saturnruntoshuttle = coreward%;/jupiterruntoshuttle
+/def plutoruntoshuttle = coreward%;coreward%;;coreward%;/jupiterruntoshuttle
+/def blackholeruntoshuttle = ds%;ds%;coreward%;coreward%;/saturnruntoshuttle
+
+;/def -p0 -mregexp -t'legs run away with you' goback = coreward%;coreward%;coreward%;d%;d%;d%;d%;/spacetoshuttle
+/def -p0 -mregexp -t'all of your wounds have' gojupe = /infirmarytoshuttle
+;/def -p0 -mregexp -t'planets circling our sun' podtojupe = /spacetojupe
+/def spacetoshuttle = d%;n%;e%;ascend%;ascend%;e%;e%;e%;e%;board shuttle%;
