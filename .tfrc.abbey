@@ -1,0 +1,5 @@
+
+/def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
+/def inftoabbey = /infirmarytoexit%;slide science%;enter%;u%;n%;n%;n%;n%;d%;n%;n%;n%;n%;n%;n%;n%;n%;e%;e%;path
+/def abbeytoinf = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;/sciencetoinf
+

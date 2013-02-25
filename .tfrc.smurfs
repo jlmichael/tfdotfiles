@@ -1,7 +1,7 @@
 /def start = /set target brainy%;/set incombat no%;am
 
 /def -p0 -mregexp -t'legs run away with you' lookafterrun = wimpy 0%;/eval /repeat -$[rand(1000,2500)/1000] 1 l
-/def -p0 -mregexp -t'all of your wounds' donehealing = /set healing no%;wimpy 47%;edna%;/eval /infto$[target]%;/if (incombat =~ "no") /eval kill $[target]%;/set incombat yes%; /endif
+/def -p0 -mregexp -t'all of your wounds' donehealing = /set healing no%;wimpy 40%;edna%;/eval /infto$[target]%;/if (incombat =~ "no") /eval kill $[target]%;/set incombat yes%; /endif
 /def inftosmurfs = /infirmarytoexit%;slide chaos%;enter%;e%;s%;
 /def smurfstoinf = n%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;admit myself%;/set healing yes
 /def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
