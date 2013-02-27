@@ -6,7 +6,7 @@
 /def -p0 -mregexp -t'all of your wounds' donehealing = /set healing no%;wimpy 38%;edna%;/if (efield_up =~ "no") efield%; /endif%;/eval /infto$[target]%;/if (incombat =~ "no") /eval kill $[target]%;/set incombat yes%; /endif
 /def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
 
-/def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = gac%;pab%;/eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot
+/def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = gac%;pab%;/eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot%;/set ranaway 0
 /def -p0 -mregexp -t'^Syd dealt the killing blow to A' gota = /set target b%;/set incombat no%;/atoinf
 /def -p0 -mregexp -t'^Syd dealt the killing blow to B' gotb = /set target c%;/set incombat no%;/btoinf
 /def -p0 -mregexp -t'^Syd dealt the killing blow to C' gotc = /set target d%;/set incombat no%;/ctoinf
