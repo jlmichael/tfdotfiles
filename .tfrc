@@ -1,8 +1,11 @@
 /addworld -Tlp 3K 3k.org 3000
 /set status_fields=hpbar hpbar:30
-/def -p0 -ag -mregexp -t'^H\\:.*$' hptracker = /set hpbar %P0
+/def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /set hpbar %P0
 /def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = gac%;pab%;/sys echo "You killed %P1!" >> /tmp/mudfeedbot
 /def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
+/def -p0 -mregexp -t'Energy Field Collapsing' efieldoff = /set efield_up no
+/def -p0 -mregexp -t'Energy Field deactivation complete' efieldoff2 = /set efield_up no
+/def -p0 -mregexp -t'Raising Perimeter Energy Field' efieldon = /set efield_up yes
 
 /def chaostoguild = s%;e%;e%;s%;s%;s%;s%;s%;s%;s%;se%;activate pillar
 /def sciencetoguild = w%;w%;s%;s%;s%;s%;se%;activate pillar%;
