@@ -1,37 +1,62 @@
-/def start = /set target a%;/set incombat no%;/set ranaway 0%;am
+/def start = \
+     /set wimpyminhp 75%; \
+     /set wimpypercent 0%; \
+     /set target a%; \
+     /set wimpycommand /atoinf%; \
+     /set incombat no%; \
+     /set ranaway 0%; \
+     am
 
-/def -p0 -mregexp -t'legs run away with you' lookafterrun = /eval /set ranaway $[ranaway + 1]%;wimpy 0%;/eval /repeat -$[rand(1000,2500)/1000] 1 l
+/def -p0 -mregexp -t'legs run away with you' lookafterrun = \
+     /eval /set ranaway $[ranaway + 1]%; \
+     /eval /repeat -$[rand(1000,2500)/1000] 1 l
 /def inftoalpha = w%;s%;s%;d%;d%;w%;slide chaos%;enter%;e%;e%;d%;
-/def alphatoinf = u%;w%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;admit myself%;/set healing yes%;/if (efield_up =~ "yes") efield%; /endif
-/def -p0 -mregexp -t'all of your wounds' donehealing = /set healing no%;wimpy 38%;edna%;/if (efield_up =~ "no") efield%; /endif%;/eval /infto$[target]%;/if (incombat =~ "no") /eval kill $[target]%;/set incombat yes%; /endif
+/def alphatoinf = \
+     /set wimpyminhp 0%; \
+     u%;w%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;admit myself%; \
+     /set healing yes%; \
+     /if (efield_up =~ "yes") efield%; /endif
+/def -p0 -mregexp -t'all of your wounds' donehealing = \
+     /set healing no%; \
+     /set wimpyminhp 75%; \
+     edna%; \
+     /if (efield_up =~ "no") efield%; /endif%; \
+     /eval /infto$[target]%; \
+     /if (incombat =~ "no") \
+     	 /eval kill $[target]%; \
+	 /set incombat yes%; \
+     /endif
 /def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
 
-/def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = gac%;pab%;/eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot%;/set ranaway 0
-/def -p0 -mregexp -t'^Syd dealt the killing blow to A' gota = /set target b%;/set incombat no%;/atoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to B' gotb = /set target c%;/set incombat no%;/btoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to C' gotc = /set target d%;/set incombat no%;/ctoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to D' gotd = /set target e%;/set incombat no%;/dtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to E' gote = /set target f%;/set incombat no%;/etoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to F' gotf = /set target g%;/set incombat no%;/ftoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to G' gotg = /set target h%;/set incombat no%;/gtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to H' goth = /set target i%;/set incombat no%;/htoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to I' goti = /set target j%;/set incombat no%;/itoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to J' gotj = /set target k%;/set incombat no%;/jtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to K' gotk = /set target l%;/set incombat no%;/ktoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to L' gotl = /set target m%;/set incombat no%;/ltoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to M' gotm = /set target n%;/set incombat no%;/mtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to N' gotn = /set target o%;/set incombat no%;/ntoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to O' goto = /set target p%;/set incombat no%;/otoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to P' gotp = /set target q%;/set incombat no%;/ptoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Q' gotq = /set target s%;/set incombat no%;/qtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to S' gots = /set target t%;/set incombat no%;/stoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to T' gott = /set target u%;/set incombat no%;/ttoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to U' gotu = /set target v%;/set incombat no%;/utoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to V' gotv = /set target w%;/set incombat no%;/vtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to W' gotw = /set target x%;/set incombat no%;/wtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to X' gotx = /set target y%;/set incombat no%;/xtoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Y' goty = /set target z%;/set incombat no%;/ytoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Z' gotz = /set target a%;/set incombat no%;/ztoinf
+/def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
+     gac%;pab%; \
+     /eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot%; \
+     /set ranaway 0
+/def -p0 -mregexp -t'^Syd dealt the killing blow to A' gota = /set target b%;/set incombat no%;/atoinf%;/set wimpycommand /btoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to B' gotb = /set target c%;/set incombat no%;/btoinf%;/set wimpycommand /ctoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to C' gotc = /set target d%;/set incombat no%;/ctoinf%;/set wimpycommand /dtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to D' gotd = /set target e%;/set incombat no%;/dtoinf%;/set wimpycommand /etoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to E' gote = /set target f%;/set incombat no%;/etoinf%;/set wimpycommand /ftoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to F' gotf = /set target g%;/set incombat no%;/ftoinf%;/set wimpycommand /gtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to G' gotg = /set target h%;/set incombat no%;/gtoinf%;/set wimpycommand /htoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to H' goth = /set target i%;/set incombat no%;/htoinf%;/set wimpycommand /itoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to I' goti = /set target j%;/set incombat no%;/itoinf%;/set wimpycommand /jtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to J' gotj = /set target k%;/set incombat no%;/jtoinf%;/set wimpycommand /ktoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to K' gotk = /set target l%;/set incombat no%;/ktoinf%;/set wimpycommand /ltoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to L' gotl = /set target m%;/set incombat no%;/ltoinf%;/set wimpycommand /mtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to M' gotm = /set target n%;/set incombat no%;/mtoinf%;/set wimpycommand /ntoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to N' gotn = /set target o%;/set incombat no%;/ntoinf%;/set wimpycommand /otoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to O' goto = /set target p%;/set incombat no%;/otoinf%;/set wimpycommand /ptoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to P' gotp = /set target q%;/set incombat no%;/ptoinf%;/set wimpycommand /qtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Q' gotq = /set target s%;/set incombat no%;/qtoinf%;/set wimpycommand /stoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to S' gots = /set target t%;/set incombat no%;/stoinf%;/set wimpycommand /ttoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to T' gott = /set target u%;/set incombat no%;/ttoinf%;/set wimpycommand /utoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to U' gotu = /set target v%;/set incombat no%;/utoinf%;/set wimpycommand /vtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to V' gotv = /set target w%;/set incombat no%;/vtoinf%;/set wimpycommand /wtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to W' gotw = /set target x%;/set incombat no%;/wtoinf%;/set wimpycommand /xtoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to X' gotx = /set target y%;/set incombat no%;/xtoinf%;/set wimpycommand /ytoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Y' goty = /set target z%;/set incombat no%;/ytoinf%;/set wimpycommand /ztoinf
+/def -p0 -mregexp -t'^Syd dealt the killing blow to Z' gotz = /set target a%;/set incombat no%;/ztoinf%;/set wimpycommand /atoinf
 
 /def atoinf = n%;/alphatoinf
 /def btoinf = w%;/atoinf

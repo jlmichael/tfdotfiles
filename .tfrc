@@ -9,6 +9,9 @@
 ; For delaying execution of stuff
 /def delay = /repeat -%{1} 1 %{2}
 
+; Setup dynamic wimpycommand execution
+/def dowimpy = /eval -s0 %{*}
+
 ; HP Bar triggers and stuff
 /set status_fields=hpbar hpbar:30
 /def -p20 -F -mregexp -t'^H\\:([0-9]+)\/([0-9]+) S\\:([0-9]+)\/([0-9]+) P\\:([0-9]+)\/([0-9]+)\(([0-9]+)\)' parsehp = \
@@ -21,7 +24,13 @@
      /set spu %P7%; \
      /eval /set hppercent $[curhp / maxhp * 100]
 /def -p19 -F -mregexp -t'^H\\:' recharger = /if ((curpu + spu <= maxpu) & (spu > 0)) recharge%; /endif
-/def -p18 -F -mregexp -t'^H\\:' smartwimpy = /if (wimpypercent != 0 & hppercent < wimpypercent) /eval $[wimpydir]%; /endif 
+/def -p18 -F -mregexp -t'^H\\:' smartwimpy = \
+     /if ( \
+     	 (wimpypercent != 0 & hppercent < wimpypercent) | \
+	 (wimpyminhp != 0 & curhp < wimpyminhp) \
+     ) \
+     /eval /set ranaway $[ranaway + 1]%; \
+     /eval /dowimpy $[wimpycommand]%; /endif 
 /def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /set hpbar %P0
 
 ; Kill trigger + notification
@@ -44,7 +53,7 @@
 /def infirmarytoexit = w%;s%;s%;d%;d%;w%;
 
 ; Automatically recharge from SPU when admitted to the infirmary
-/def -p0 -mregexp -t'with needles and scalpels. You begin to feel better' recharge = recharge
+/def -p0 -mregexp -t'with needles and scalpels. You begin to feel better' recharge = recharge%;/delay 60 recharge%;
 
 ; unidler stuff
 /def doRandomAction = \
