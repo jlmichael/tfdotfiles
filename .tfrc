@@ -21,6 +21,7 @@
      /set spu %P7%; \
      /eval /set hppercent $[curhp / maxhp * 100]
 /def -p19 -F -mregexp -t'^H\\:' recharger = /if ((curpu + spu <= maxpu) & (spu > 0)) recharge%; /endif
+/def -p18 -F -mregexp -t'^H\\:' smartwimpy = /if (wimpypercent != 0 & hppercent < wimpypercent) /eval $[wimpydir]%; /endif 
 /def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /set hpbar %P0
 
 ; Kill trigger + notification
@@ -46,7 +47,21 @@
 /def -p0 -mregexp -t'with needles and scalpels. You begin to feel better' recharge = recharge
 
 ; unidler stuff
-/def doRandomAction = /set roll $[rand(1,6)]%; /if (roll == 1) hp%; /elseif (roll == 2) gs%; /elseif (roll == 3) gs2%; /elseif (roll == 4) rcost%; /elseif (roll == 5) gwho%; /else sc%; /endif
+/def doRandomAction = \
+     /set roll $[rand(1,6)]%; \
+     /if (roll == 1) \
+     	  hp%; \
+     /elseif (roll == 2) \
+     	  gs%; \
+     /elseif (roll == 3) \
+     	  gs2%; \
+     /elseif (roll == 4) \
+     	  rcost%; \
+     /elseif (roll == 5) \
+     	  gwho%; \
+     /else \
+          sc%; \
+     /endif
 /def unidle = /if (unidler =~ "on") /doRandomAction%; /endif%;/repeat -$[rand(700,840)] 1 /unidle%;
  
 
