@@ -27,10 +27,12 @@
 /def -p18 -F -mregexp -t'^H\\:' smartwimpy = \
      /if ( \
      	 (wimpypercent != 0 & hppercent < wimpypercent) | \
-	 (wimpyminhp != 0 & curhp < wimpyminhp) \
+	 (wimpyminhp != 0 & curhp < wimpyminhp) | \
+	 (wimpyminpu != 0 & curpu < wimpyminpu) \
      ) \
      /eval /set ranaway $[ranaway + 1]%; \
-     /eval /dowimpy $[wimpycommand]%; /endif 
+     /eval /dowimpy $[wimpycommand]%; /endif
+ 
 /def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /set hpbar %P0
 
 ; Kill trigger + notification

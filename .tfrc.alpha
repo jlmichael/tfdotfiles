@@ -1,5 +1,6 @@
 /def start = \
      /set wimpyminhp 75%; \
+     /set wimpyminpu 50%; \
      /set wimpypercent 0%; \
      /set target a%; \
      /set wimpycommand /atoinf%; \
@@ -13,12 +14,14 @@
 /def inftoalpha = w%;s%;s%;d%;d%;w%;slide chaos%;enter%;e%;e%;d%;
 /def alphatoinf = \
      /set wimpyminhp 0%; \
+     /set wimpyminpu 0%; \
      u%;w%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;admit myself%; \
      /set healing yes%; \
      /if (efield_up =~ "yes") efield%; /endif
 /def -p0 -mregexp -t'all of your wounds' donehealing = \
      /set healing no%; \
-     /set wimpyminhp 75%; \
+     /set wimpyminhp 100%; \
+     /set wimpyminpu 50%; \
      edna%; \
      /if (efield_up =~ "no") efield%; /endif%; \
      /eval /infto$[target]%; \
