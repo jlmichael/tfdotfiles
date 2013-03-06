@@ -1,5 +1,5 @@
 /def start = \
-     /set wimpyminhp 75%; \
+     /set wimpyminhp 100%; \
      /set wimpyminpu 50%; \
      /set wimpypercent 0%; \
      /set target a%; \

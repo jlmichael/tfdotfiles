@@ -14,7 +14,7 @@
 
 ; HP Bar triggers and stuff
 /set status_fields=hpbar hpbar:30
-/def -p20 -F -mregexp -t'^H\\:([0-9]+)\/([0-9]+) S\\:([0-9]+)\/([0-9]+) P\\:([0-9]+)\/([0-9]+)\(([0-9]+)\)' parsehp = \
+/def -p21 -F -mregexp -t'^H\\:([0-9]+)\/([0-9]+) S\\:([0-9]+)\/([0-9]+) P\\:([0-9]+)\/([0-9]+)\(([0-9]+)\) .* Gexp\\:([0-9]+) .* RC\\:([0-9]+)' parsehp = \
      /set curhp %P1%; \
      /set maxhp %P2%; \
      /set cursp %P3%; \
@@ -22,7 +22,15 @@
      /set curpu %P5%; \
      /set maxpu %P6%; \
      /set spu %P7%; \
-     /eval /set hppercent $[curhp / maxhp * 100]
+     /set gxp %P8%; \
+     /set rc %P9%; \
+     /eval /set hppercent $[curhp / maxhp * 100]%; \
+     /eval /set gxpdiff $[gxp - lastgxp]%; \
+     /eval /set rcdiff $[rc - lastrc]%; \
+     /eval /set lastgxp $[gxp]%; \
+     /eval /set lastrc $[rc]%; \
+     /if (echodiffs =~ "on") /eval /echo "GXP: $[gxpdiff], RC: $[rcdiff]"
+
 /def -p19 -F -mregexp -t'^H\\:' recharger = /if ((curpu + spu <= maxpu) & (spu > 0)) recharge%; /endif
 /def -p18 -F -mregexp -t'^H\\:' smartwimpy = \
      /if ( \
@@ -33,7 +41,7 @@
      /eval /set ranaway $[ranaway + 1]%; \
      /eval /dowimpy $[wimpycommand]%; /endif
  
-/def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /set hpbar %P0
+/def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /eval /set hpbar %P0 GXPDiff: $[gxpdiff] RCDiff: $[rcdiff]
 
 ; Kill trigger + notification
 /def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = gac%;pab%;/sys echo "You killed %P1!" >> /tmp/mudfeedbot
