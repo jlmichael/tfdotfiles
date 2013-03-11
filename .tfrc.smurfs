@@ -1,40 +1,140 @@
-/def start = /set target brainy%;/set incombat no%;am
+/def start = \
+     /set wimpyminhp 100%; \
+     /set wimpyminpu 50%; \
+     /set wimpypercent 0%; \
+     /set target 19%; \
+     /set wimpycommand /1toinf%; \
+     /set incombat no%; \
+     /set ranaway 0%; \
+     am
 
-/def -p0 -mregexp -t'legs run away with you' lookafterrun = wimpy 0%;/eval /repeat -$[rand(1000,2500)/1000] 1 l
-/def -p0 -mregexp -t'all of your wounds' donehealing = /set healing no%;wimpy 40%;edna%;/eval /infto$[target]%;/if (incombat =~ "no") /eval kill $[target]%;/set incombat yes%; /endif
+/def -p0 -mregexp -t'all of your wounds' donehealing = \
+     /stophealing%; \
+     /eval /infto$[target]%; \
+     /if (incombat =~ "no") kk%;/set incombat yes%; /endif
+
 /def inftosmurfs = /infirmarytoexit%;slide chaos%;enter%;e%;s%;
-/def smurfstoinf = n%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;admit myself%;/set healing yes
-/def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
+/def smurfstoinf = n%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;/starthealing
+/def inftocastle = /infto10%;s%;s%;s%;s%;s%;s%;s%;s%;
+/def castletoinf = n%;n%;n%;n%;n%;n%;n%;n%;/10toinf%;
 
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Brainy' gotbrainy = /set target smelly%;/set incombat no%;/brainytoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Smelly' gotsmelly = /set target papa%;/set incombat no%;/smellytoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Papa' gotpapa = /set target vanity%;/set incombat no%;/papatoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Vanity' gotvanity = /set target smurfette%;/set incombat no%;/vanitytoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Smurfette' gotsmurfette = /set target jokey%;/set incombat no%;/smurfettetoinf
-/def -p0 -mregexp -t'^Syd dealt the killing blow to Jokey' gotjokey = /set target brainy%;/set incombat no%;/jokeytoinf
+; Override getall because some mobs are in the dark, so we need to turn our light on before getting all
+/def -p10 -F -mregexp -t'Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
+     ion%;gac%;pab%;ioff%; \
+     /eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot%; \
+     /set ranaway 0
 
-/def inftobrainy = /inftosmurfs%;s
-/def inftosmelly = /inftobrainy%;s
-/def inftopapa = /inftosmelly%;s
-/def inftovanity = /inftopapa%;w
-/def inftosmurfette = /inftopapa%;e
-/def inftojokey = /inftopapa%;s
+; Gargamel requires using efield right now, so handle it right
+/def -p9 -F -mregexp -t'Syd dealt the killing blow to Gargamel' killedgarg = \
+     /if (efield_up =~ "yes") efield%; /endif%;
 
-/def brainytoinf = n%;/smurfstoinf
-/def smellytoinf = n%;/brainytoinf
-/def papatoinf = n%;/smellytoinf
-/def vanitytoinf = e%;/papatoinf
-/def smurfettetoinf = w%;/papatoinf
-/def jokeytoinf = n%;/papatoinf
-/def handytoinf = e%;/jokeytoinf
-/def clumsytoinf = w%;/jokeytoinf
+/def -p0 -mregexp -t'Syd dealt the killing blow to ' killedone = \
+     /set incombat no%; \
+     /eval /set nextTarget $[target + 1]%; \
+     /if (nextTarget =~ '34') /set nextTarget 1%; /endif%; \
+     /eval /$[target]to$[nextTarget]%; \
+     /eval /set target $[nextTarget]%; \
+     /eval /set wimpycommand /$[target]toinf%; \
+     /if (incombat !~ 'yes') kk%;/set incombat yes%; /endif
 
-/def -p0 -mregexp -t'^You seem to be in some sort of forest. The trees look like large mushrooms.' fromentry = /smurfstoinf
-/def -p0 -mregexp -t'^This looks like a regular forest, except everything is so large, even the' frombrainy = /brainytoinf
-/def -p0 -mregexp -t'^large mushrooms, and there are stone paths leading off' fromsmelly = /smellytoinf
-/def -p0 -mregexp -t'^large mushrooms. You see a well and stone paths' frompapa = /papatoinf
-/def -p0 -mregexp -t'don\'t taste very good, because there\'s a lot of monsters in the forest that' fromjokey = /jokeytoinf
-/def -p0 -mregexp -t'^dressing table over to the west' fromvanity = /vanitytoinf
-/def -p0 -mregexp -t'^This is one of the larger and nicer homes on the street' fromsmurfette = /smurfettetoinf
-/def -p0 -mregexp -t'^This house looks more like a workshed. Tools lay all over the floor. There' fromhandy = /handytoinf
-/def -p0 -mregexp -t'^being so very large. There appears to be a very large rock blocking the well' fromclumsy = /clumsytoinf
+/def infto1 = /inftosmurfs%;s
+/def infto2 = /infto1%;s
+/def infto3 = /infto2%;s
+/def infto4 = /infto3%;w
+/def infto5 = /infto3%;e
+/def infto6 = /infto3%;s
+/def infto7 = /infto6%;w
+/def infto8 = /infto6%;w
+/def infto9 = /infto6%;e
+/def infto10 = /infto9%;e%;
+/def infto11 = /infto12;se%;
+/def infto12 = /infto9%;sw%;
+/def infto13 = /infto11%;w%;
+/def infto14 = /infto11%;s%;w%;w%;n%;
+/def infto15 = /infto11%;s%;s%;w%;w%;s%;s%;
+/def infto16 = /infto11%;s%;s%;s%;e%;s%;s%;
+/def infto17 = /inftocastle%;enter%;e%;
+/def infto18 = /inftocastle%;enter%;w%;
+/def infto19 = /inftocastle%;enter%;s%;
+/def infto20 = /infto19%;e%;
+/def infto21 = /infto19%;w%;
+/def infto22 = /infto19%;s%;e%;
+/def infto23 = /infto19%;s%;w%;
+/def infto24 = /infto19%;s%;s%;e%;
+/def infto25 = /infto19%;s%;s%;w%;
+/def infto26 = /infto19%;s%;s%;s%;
+/def infto27 = /infto26%;e%;
+/def infto28 = /infto26%;w%;
+/def infto29 = /infto26%;s%;e%;
+/def infto30 = /infto26%;s%;w%;
+/def infto31 = /infto26%;s%;s%;
+/def infto32 = /infto31%;w%;
+/def infto33 = /infto31%;e%;
+
+/def 33toinf = w%;/31toinf%;
+/def 32toinf = e%;/31toinf%;
+/def 31toinf = n%;n%;/26toinf%;
+/def 30toinf = e%;n%;/26toinf%;
+/def 29toinf = w%;n%;/26toinf%;
+/def 28toinf = e%;/26toinf%;
+/def 27toinf = w%;/26toinf%;
+/def 26toinf = n%;n%;n%;/19toinf%;
+/def 25toinf = e%;n%;n%;/19toinf%;
+/def 24toinf = w%;n%;n%;/19toinf%;
+/def 23toinf = e%;n%;/19toinf%;
+/def 22toinf = w%;n%;/19toinf%;
+/def 21toinf = e%;/19toinf%;
+/def 20toinf = w%;/19toinf%;
+/def 19toinf = n%;out%;/castletoinf%;
+/def 18toinf = e%;out%;/castletoinf%;
+/def 17toinf = w%;out%;/castletoinf%;
+/def 16toinf = n%;n%;n%;w%;n%;w%;/11toinf%;
+/def 15toinf = n%;n%;n%;e%;e%;n%;/11toinf%;
+/def 14toinf = s%;e%;e%;n%;/11toinf%;
+/def 13toinf = e%;/11toinf%;
+/def 12toinf = ne%;/9toinf%;
+/def 11toinf = nw%;/12toinf%;
+/def 10toinf = w%;/9toinf%;
+/def 9toinf = w%;/6toinf%;
+/def 8toinf = e%;/6toinf%;
+/def 7toinf = /8toinf%;
+/def 6toinf = n%;/3toinf%;
+/def 5toinf = w%;/3toinf%;
+/def 4toinf = e%;/3toinf%;
+/def 3toinf = n%;/2toinf%;
+/def 2toinf = n%;/1toinf%;
+/def 1toinf = n%;/smurfstoinf%;
+
+/def 1to2 = s%;
+/def 2to3 = s%;
+/def 3to4 = w%;
+/def 4to5 = e%;e%;
+/def 5to6 = w%;s%;
+/def 6to7 = w%;
+/def 7to8 = cs%;
+/def 8to9 = e%;e%;
+/def 9to10 = e%;
+/def 10to11 = s%;s%;w%;
+/def 11to12 = nw%;
+/def 12to13 = se%;w%;
+/def 13to14 = e%;s%;w%;w%;n%;
+/def 14to15 = s%;s%;s%;s%;/set incombat yes%;
+/def 15to16 = e%;e%;e%;e%;/set incombat yes%;
+/def 16to17 = w%;s%;s%;enter%;e%;/set incombat yes%;
+/def 17to18 = w%;w%;/set incombat yes%;
+/def 18to19 = e%;s%;/set incombat yes%;
+/def 19to20 = e%;/set incombat yes%;
+/def 20to21 = w%;w%;/set incombat yes%;
+/def 21to22 = e%;s%;e%;/set incombat yes%;
+/def 22to23 = w%;w%;/set incombat yes%;
+/def 23to24 = e%;s%;e%;/set incombat yes%;
+/def 24to25 = w%;w%;/set incombat yes%;
+/def 25to26 = e%;s%;/set incombat yes%;
+/def 26to27 = e%;/set incombat yes%;
+/def 27to28 = w%;w%;/set incombat yes%;
+/def 28to29 = e%;s%;/set wimpyminhp 150%;/if (efield_up =~ "no") efield%; /endif%;e%;/set incombat yes%;
+/def 29to30 = /set wimpyminhp 100%;w%;w%;/set incombat yes%;
+/def 30to31 = e%;s%;/set incombat yes%;
+/def 31to32 = w%;/set incombat yes%;
+/def 32to33 = e%;e%;/set incombat yes%;
+/def 33to1 = w%;n%;n%;n%;n%;n%;n%;out%;n%;n%;n%;n%;n%;n%;n%;n%;w%;w%;n%;n%;n%;/set incombat no%;
