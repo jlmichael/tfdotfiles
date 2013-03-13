@@ -47,7 +47,7 @@
 /def infto8 = /infto6%;w
 /def infto9 = /infto6%;e
 /def infto10 = /infto9%;e%;
-/def infto11 = /infto12;se%;
+/def infto11 = /infto12%;se%;
 /def infto12 = /infto9%;sw%;
 /def infto13 = /infto11%;w%;
 /def infto14 = /infto11%;s%;w%;w%;n%;
@@ -122,7 +122,7 @@
 /def 15to16 = e%;e%;e%;e%;/set incombat yes%;
 /def 16to17 = w%;s%;s%;enter%;e%;/set incombat yes%;
 /def 17to18 = w%;w%;/set incombat yes%;
-/def 18to19 = e%;s%;/set incombat yes%;
+/def 18to19 = /18tobank%;/bankto19%;/set incombat yes%;
 /def 19to20 = e%;/set incombat yes%;
 /def 20to21 = w%;w%;/set incombat yes%;
 /def 21to22 = e%;s%;e%;/set incombat yes%;
@@ -138,3 +138,6 @@
 /def 31to32 = w%;/set incombat yes%;
 /def 32to33 = e%;e%;/set incombat yes%;
 /def 33to1 = w%;n%;n%;n%;n%;n%;n%;out%;n%;n%;n%;n%;n%;n%;n%;n%;w%;w%;n%;n%;n%;/set incombat no%;
+
+/def 18tobank = e%;out%;n%;n%;n%;n%;n%;n%;n%;n%;w%;w%;n%;n%;n%;n%;n%;w%;vortex%;/chaostoguild%;e%;u%;w%;deposit all%;n%;donate all from backpack%;trash all from backpack%;s%;
+/def bankto19 = e%;d%;w%;slide chaos%;enter%;e%;s%;s%;s%;s%;s%;e%;e%;s%;s%;s%;s%;s%;s%;s%;s%;enter%;s%;
