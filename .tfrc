@@ -12,6 +12,11 @@
 ; Setup dynamic wimpycommand execution
 /def dowimpy = /eval -s0 %{*}
 
+; Restore wimpy levels from _tmp
+/def restorewimpyhp = /eval /set wimpyminhp $[wimpyminhp_tmp]
+/def restorewimpypu = /eval /set wimpyminpu $[wimpyminpu_tmp]
+/def restorewimpysp = /eval /set wimpyminsp $[wimpyminsp_tmp]
+
 ; HP Bar triggers and stuff
 /set status_fields=hpbar hpbar:30
 /def -p21 -F -mregexp -t'^H\\:([0-9]+)\/([0-9]+) S\\:([0-9]+)\/([0-9]+) P\\:([0-9]+)\/([0-9]+)\(([0-9]+)\) .* Gexp\\:([0-9]+) .* RC\\:([0-9]+)' parsehp = \
@@ -34,17 +39,28 @@
 /def -p18 -F -mregexp -t'^H\\:' smartwimpy = \
      /if ( \
      	 (wimpypercent != 0 & hppercent < wimpypercent) | \
-	 (wimpyminhp != 0 & curhp < wimpyminhp) | \
+	 (wimpyminhp != 0 & curhp < wimpyminhp) \
+     ) \
+     /eval /set outofhp $[outofhp + 1]%; \
+     /eval /dowimpy $[outofhpcommand]%; \
+     /elseif ( \
 	 (wimpyminpu != 0 & curpu < wimpyminpu) \
      ) \
-     /eval /set ranaway $[ranaway + 1]%; \
-     /eval /dowimpy $[wimpycommand]%; /endif
+     /eval /set outofpu $[outofpu + 1]%; \
+     /eval /dowimpy $[outofpucommand]%; \
+     /elseif ( \
+         (wimpyminsp != 0 & cursp < wimpyminsp) \
+     ) \
+     /eval /set outofsp $[outofsp + 1]%; \
+     /eval /dowimpy $[outofspcommand]%; \
+     /endif
+
 /def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /eval /set hpbar %P0 GXPDiff: $[gxpdiff] RCDiff: $[rcdiff]
 
 ; Kill trigger + notification
 /def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
      gac%;pab%; \
-     /eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot%; \
+     /eval /sys echo "You killed %P1 and ran out of hp:pu:sp $[outofhp]:$[outofpu]$[outofsp] times" >> /tmp/mudfeedbot%; \
      /set ranaway 0
 
 ; Ability triggers, status bookkeeping
@@ -57,6 +73,7 @@
 /def starthealing = \
      /eval /set wimpyminhp_tmp $[wimpyminhp]%; \
      /eval /set wimpyminpu_tmp $[wimpyminpu]%; \
+     /eval /set wimpyminsp_tmp $[wimpyminsp]%; \
      /set wimpyminhp 0%; \
      /set wimpyminpu 0%; \
      /set healing yes%; \
@@ -65,6 +82,7 @@
 /def stophealing = \
      /eval /set wimpyminhp $[wimpyminhp_tmp]%; \
      /eval /set wimpyminpu $[wimpyminpu_tmp]%; \
+     /eval /set wimpyminsp $[wimpyminsp_tmp]%; \
      /set healing no%; \
      /if ((efield_up =~ "no") & (use_efield =~ "yes")) efield%; /endif%; \
      edna

@@ -1,6 +1,6 @@
 /def start = \
-     /set wimpyminhp 100%; \
-     /set wimpyminpu 50%; \
+     /set wimpyminhp 150%; \
+     /set wimpyminpu 100%; \
      /set wimpypercent 0%; \
      /set target a%; \
      /set wimpycommand /atoinf%; \
