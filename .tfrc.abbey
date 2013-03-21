@@ -1,5 +1,102 @@
+/def start = \
+     /set wimpyminhp 150%; \
+     /set wimpyminpu 100%; \
+     /set wimpyminsp 20%; \
+     /set wimpyminhp_tmp 150%; \
+     /set wimpyminpu_tmp 100%; \
+     /set wimpyminsp_tmp 20%; \
+     /set wimpypercent 0%; \
+     /set target 1%; \
+     /set outofhpcommand /1toinf%; \
+     /set outofpucommand /1toinf%; \
+     /set outofhp 0%; \
+     /set outofpu 0%; \
+     /set outofsp 0%; \
+     /set incombat no%; \
+     am
 
-/def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing =~ "no") edna%; /endif
+/def -p0 -mregexp -t'all of your wounds' donehealing = \
+     /stophealing%; \
+     /eval /infto$[target]%; \
+     /if (incombat =~ "no") kk%;/set incombat yes%; /endif
+
 /def inftoabbey = /infirmarytoexit%;slide science%;enter%;u%;n%;n%;n%;n%;d%;n%;n%;n%;n%;n%;n%;n%;n%;e%;e%;path
-/def abbeytoinf = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;/sciencetoinf
+/def abbeytoinf = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;/sciencetoguild%;e%;u%;u%;n%;n%;e%;/starthealing
+
+; When we kill something, immediately start trying to kill the next thing in the room
+/def -p10 -F -mregexp -t'Syd dealt the killing blow to ' killedone = kk
+
+; If there's nothing left in the room, go to the next
+/def -p0 -mregexp -t'There are no valid targets in this area' novalidtarget = \
+     /eval /set nobodyhome $[nobodyhome + 1]%; \
+     /if (nobodyhome < 5) /gotonext%; \
+     /else /eval /sys echo "Crap - got 5 nobody homes in a row, might be in an indeterminate state!" >> /tmp/mudfeedbot%; \
+     /endif
+
+/def gotonext = \
+     /eval /set nextTarget $[target + 1]%; \
+     /if (nextTarget =~ '17') /set nextTarget 1%; /endif%; \
+     /eval /$[target]to$[nextTarget]%; \
+     /eval /set target $[nextTarget]%; \
+     /eval /set outofhpcommand /$[target]toinf%; \
+     /eval /set outofpucommand /$[target]toinf%; \
+     kk
+
+/def -p0 -mregexp -t'You turn to attack' somebodyhome = /set nobodyhome 0
+
+; The guards at the staircase will stop you from going down, so need to reset state
+/def -p0 -mregexp -t'The guard prevents you from going down' stoppedbyguards = /set target 5%;/set outofhpcommand /5toinf%;/set outofpucommand /5toinf%;e%;kk
+
+/def 1toinf = s%;/abbeytoinf
+/def 2toinf = s%;/1toinf
+/def 3toinf = w%;/1toinf
+/def 4toinf = s%;/3toinf
+/def 5toinf = w%;s%;/4toinf
+/def 6toinf = e%;u%;/5toinf
+/def 7toinf = e%;n%;n%;u%;/5toinf
+/def 8toinf = w%;n%;n%;u%;/5toinf
+/def 9toinf = w%;n%;n%;n%;n%;u%;/5toinf
+/def 10toinf = e%;n%;n%;n%;n%;u%;/5toinf
+/def 11toinf = w%;n%;n%;n%;n%;n%;n%;u%;/5toinf
+/def 12toinf = e%;n%;n%;n%;n%;n%;n%;u%;/5toinf
+/def 13toinf = w%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
+/def 14toinf = e%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
+/def 15toinf = w%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;/5toinf
+/def 16toinf = e%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
+
+/def infto1 = /inftoabbey%;n
+/def infto2 = /infto1%;n
+/def infto3 = /infto1%;e
+/def infto4 = /infto3%;n
+/def infto5 = /infto4%;n%;e
+/def infto6 = /infto5%;d%;w
+/def infto7 = /infto5%;d%;s%;s%;w
+/def infto8 = /infto5%;d%;s%;s%;e
+/def infto9 = /infto5%;d%;s%;s%;s%;s%;e
+/def infto10 = /infto5%;d%;s%;s%;s%;s%;w
+/def infto11 = /infto5%;d%;s%;s%;s%;s%;s%;s%;e
+/def infto12 = /infto5%;d%;s%;s%;s%;s%;s%;s%;w
+/def infto13 = /infto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;e
+/def infto14 = /infto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;w
+/def infto15 = /infto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;s%;s%;e
+/def infto16 = /infto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;s%;s%;w
+
+/def 1to2 = n
+/def 2to3 = s%;e
+/def 3to4 = n
+/def 4to5 = n%;e
+/def 5to6 = d%;w
+/def 6to7 = e%;s%;s%;w
+/def 7to8 = e%;e
+/def 8to9 = w%;s%;s%;e
+/def 9to10 = w%;w
+/def 10to11 = e%;s%;s%;e
+/def 11to12 = w%;w
+/def 12to13 = e%;s%;s%;e
+/def 13to14 = w%;w
+/def 14to15 = e%;s%;s%;e
+/def 15to16 = w%;w
+/def 16to1 = e%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;w%;s%;s%;w%;
+
+
 

@@ -4,6 +4,8 @@
      /set wimpypercent 0%; \
      /set target a%; \
      /set wimpycommand /atoinf%; \
+     /set outofhpcommand /eval $[wimpycommand]%; \
+     /set outofpucommand /eval $[wimpycommand]%; \
      /set incombat no%; \
      /set ranaway 0%; \
      am

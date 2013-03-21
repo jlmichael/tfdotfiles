@@ -17,6 +17,9 @@
 /def restorewimpypu = /eval /set wimpyminpu $[wimpyminpu_tmp]
 /def restorewimpysp = /eval /set wimpyminsp $[wimpyminsp_tmp]
 
+; Set up the outofspcommand, which is almost always going to be meditate
+/set outofspcommand meditate
+
 ; HP Bar triggers and stuff
 /set status_fields=hpbar hpbar:30
 /def -p21 -F -mregexp -t'^H\\:([0-9]+)\/([0-9]+) S\\:([0-9]+)\/([0-9]+) P\\:([0-9]+)\/([0-9]+)\(([0-9]+)\) .* Gexp\\:([0-9]+) .* RC\\:([0-9]+)' parsehp = \
@@ -60,11 +63,12 @@
 ; Kill trigger + notification
 /def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
      gac%;pab%; \
-     /eval /sys echo "You killed %P1 and ran out of hp:pu:sp $[outofhp]:$[outofpu]$[outofsp] times" >> /tmp/mudfeedbot%; \
-     /set ranaway 0
+     /eval /sys echo "You killed %P1 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
+     /set outofhp 0%; \
+     /set outofsp 0%; \
+     /set outofpu 0%;
 
 ; Ability triggers, status bookkeeping
-/def -p0 -mregexp -t'Enhanced DNA has reverted to substandard levels' edna = /if (healing !~ "yes") edna%; /endif
 /def -p0 -mregexp -t'Energy Field Collapsing' efieldoff = /set efield_up no
 /def -p0 -mregexp -t'Energy Field deactivation complete' efieldoff2 = /set efield_up no
 /def -p0 -mregexp -t'Raising Perimeter Energy Field' efieldon = /set efield_up yes

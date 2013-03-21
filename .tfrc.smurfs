@@ -3,7 +3,8 @@
      /set wimpyminpu 50%; \
      /set wimpypercent 0%; \
      /set target 19%; \
-     /set wimpycommand /1toinf%; \
+     /set outofhpcommand /1toinf%; \
+     /set outofpucommand /1toinf%; \
      /set incombat no%; \
      /set ranaway 0%; \
      am
@@ -21,8 +22,10 @@
 ; Override getall because some mobs are in the dark, so we need to turn our light on before getting all
 /def -p10 -F -mregexp -t'Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
      ion%;gac%;pab%;ioff%; \
-     /eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot%; \
-     /set ranaway 0
+     /eval /sys echo "You killed %P1 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
+     /set outofhp 0%; \
+     /set outofsp 0%; \
+     /set outofpu 0%;
 
 ; Gargamel requires using efield right now, so handle it right
 /def -p9 -F -mregexp -t'Syd dealt the killing blow to Gargamel' killedgarg = \
@@ -31,11 +34,21 @@
 /def -p0 -mregexp -t'Syd dealt the killing blow to ' killedone = \
      /set incombat no%; \
      /eval /set nextTarget $[target + 1]%; \
-     /if (nextTarget =~ '34') /set nextTarget 1%; /endif%; \
+     /if (nextTarget =~ '36') /set nextTarget 1%; /endif%; \
      /eval /$[target]to$[nextTarget]%; \
      /eval /set target $[nextTarget]%; \
-     /eval /set wimpycommand /$[target]toinf%; \
-     /if (incombat !~ 'yes') kk%;/set incombat yes%; /endif
+     /eval /set outofhpcommand /$[target]toinf%; \
+     /eval /set outofpucommand /$[target]toinf%; \
+     kk
+
+; If we end up in a room and the mob hasn't respawned, this will move us to the next one
+/def -p0 -mregexp -t'There are no valid targets in this area' gotonext = \
+     /eval /set nobodyhome $[nobodyhome + 1]%; \
+     /if (nobodyhome < 5) /killedone%; \
+     /else /eval /sys echo "Crap - got 5 nobody homes in a row, might be in an indeterminate state!" >> /tmp/mudfeedbot%; \
+     /endif
+
+/def -p0 -mregexp -t'You turn to attack' somebodyhome = /set nobodyhome 0
 
 /def infto1 = /inftosmurfs%;s
 /def infto2 = /infto1%;s
@@ -70,7 +83,11 @@
 /def infto31 = /infto26%;s%;s%;
 /def infto32 = /infto31%;w%;
 /def infto33 = /infto31%;e%;
+/def infto34 = /infto10%;s%;s%;s%;s%;
+/def infto35 = /infto34%;w%;w%;
 
+/def 35toinf = e%;e%;/34toinf%;
+/def 34toinf = n%;n%;n%;n%;/10toinf%;
 /def 33toinf = w%;/31toinf%;
 /def 32toinf = e%;/31toinf%;
 /def 31toinf = n%;n%;/26toinf%;
@@ -132,12 +149,14 @@
 /def 25to26 = e%;s%;/set incombat yes%;
 /def 26to27 = e%;/set incombat yes%;
 /def 27to28 = w%;w%;/set incombat yes%;
-/def 28to29 = e%;s%;/set wimpyminhp 150%;/if (efield_up =~ "no") efield%; /endif%;e%;/set incombat yes%;
+/def 28to29 = e%;s%;/set wimpyminhp 150%;e%;/set incombat yes%;
 /def 29to30 = /set wimpyminhp 100%;w%;w%;/set incombat yes%;
 /def 30to31 = e%;s%;/set incombat yes%;
 /def 31to32 = w%;/set incombat yes%;
 /def 32to33 = e%;e%;/set incombat yes%;
-/def 33to1 = w%;n%;n%;n%;n%;n%;n%;out%;n%;n%;n%;n%;n%;n%;n%;n%;w%;w%;n%;n%;n%;/set incombat no%;
+/def 33to34 = w%;n%;n%;n%;n%;n%;n%;out%;n%;n%;n%;n%;/set incombat no%;
+/def 34to35 = w%;w%;/set incombat no%;
+/def 35to1 = e%;n%;n%;nw%;ne%;w%;n%;n%;n%;/set incombat no%;
 
 /def 18tobank = e%;out%;n%;n%;n%;n%;n%;n%;n%;n%;w%;w%;n%;n%;n%;n%;n%;w%;vortex%;/chaostoguild%;e%;u%;w%;deposit all%;n%;donate all from backpack%;trash all from backpack%;s%;
 /def bankto19 = e%;d%;w%;slide chaos%;enter%;e%;s%;s%;s%;s%;s%;e%;e%;s%;s%;s%;s%;s%;s%;s%;s%;enter%;s%;
