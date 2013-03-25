@@ -12,6 +12,11 @@
 ; Setup dynamic wimpycommand execution
 /def dowimpy = /eval -s0 %{*}
 
+; store wimpy levels
+/def storewimpyhp = /eval /set wimpyminhp_tmp $[wimpyminhp]
+/def storewimpypu = /eval /set wimpyminpu_tmp $[wimpyminpu]
+/def storewimpysp = /eval /set wimpyminsp_tmp $[wimpyminsp]
+
 ; Restore wimpy levels from _tmp
 /def restorewimpyhp = /eval /set wimpyminhp $[wimpyminhp_tmp]
 /def restorewimpypu = /eval /set wimpyminpu $[wimpyminpu_tmp]
@@ -75,18 +80,16 @@
 
 ; Start and stop healing at the infirmary
 /def starthealing = \
-     /eval /set wimpyminhp_tmp $[wimpyminhp]%; \
-     /eval /set wimpyminpu_tmp $[wimpyminpu]%; \
-     /eval /set wimpyminsp_tmp $[wimpyminsp]%; \
+     /storewimpyhp%; \
+     /storewimpypu%; \
      /set wimpyminhp 0%; \
      /set wimpyminpu 0%; \
      /set healing yes%; \
      /if ((efield_up =~ "yes") & (use_efield =~ "yes")) efield%; /endif%; \
      admit myself
 /def stophealing = \
-     /eval /set wimpyminhp $[wimpyminhp_tmp]%; \
-     /eval /set wimpyminpu $[wimpyminpu_tmp]%; \
-     /eval /set wimpyminsp $[wimpyminsp_tmp]%; \
+     /restorewimpyhp%; \
+     /restorewimpypu%; \
      /set healing no%; \
      /if ((efield_up =~ "no") & (use_efield =~ "yes")) efield%; /endif%; \
      edna
@@ -98,7 +101,7 @@
 /def chaostoinf = /chaostoguild%;/exittoinf
 /def sciencetoinf = /sciencetoguild%;/exittoinf
 /def fantasytoinf = /fantasytoguild%;/exittoinf
-/def exittoinf = e%;u%;u%;n%;n%;e%;admit myself
+/def exittoinf = e%;u%;u%;n%;n%;e%;/starthealing
 /def infirmarytoexit = w%;s%;s%;d%;d%;w%;
 
 ; Automatically recharge from SPU when admitted to the infirmary
@@ -121,11 +124,13 @@
           sc%; \
      /endif
 /def unidle = /if (unidler =~ "on") /doRandomAction%; /endif%;/repeat -$[rand(200,300)] 1 /unidle%;
- 
+
+; Had some trouble where synthorg would turn off.  Let's catch it and reactivate
+/def -p0 -mregexp -t'^\[> Attacks <\] \[--------\] \[ images \] \[--------\] \[--------\]' activatesynth = synthorg activate 
 
 ; write stuff to IRC bot
 /def -p0 -F -mregexp -t'([a-zA-Z]+) tells you: (.*)$' reporttell = /sys echo "%P1 told you: %P2" >> /tmp/mudfeedbot%;
-/def -p0 -F -mregexp -t'You died.' reportdeath = /sys echo "You might have died!" >> /tmp/mudfeedbot%;
+/def -p0 -F -mregexp -t'Syd has been slain' reportdeath = /sys echo "You might have died!" >> /tmp/mudfeedbot%;
 /def -p0 -F -mregexp -t'Stippytobin' reportstippy = /sys echo "Someone stippy'd!" >> /tmp/mudfeedbot%;
 /def -p0 -F -mregexp -t'([a-zA-Z]+) \[Gen-Alpha\] : (.*)$' reportcomm = /sys echo "%P1 comm'd: %P2" >> /tmp/mudfeedbot%;
 /def fromfile = /quote -dexec !"cat /tmp/deeftobdum"%;

@@ -1,9 +1,9 @@
 /def start = \
      /set wimpyminhp 150%; \
-     /set wimpyminpu 100%; \
+     /set wimpyminpu 150%; \
      /set wimpyminsp 20%; \
      /set wimpyminhp_tmp 150%; \
-     /set wimpyminpu_tmp 100%; \
+     /set wimpyminpu_tmp 150%; \
      /set wimpyminsp_tmp 20%; \
      /set wimpypercent 0%; \
      /set target 1%; \
@@ -13,7 +13,7 @@
      /set outofpu 0%; \
      /set outofsp 0%; \
      /set incombat no%; \
-     am
+     /starthealing
 
 /def -p0 -mregexp -t'all of your wounds' donehealing = \
      /stophealing%; \
@@ -45,7 +45,11 @@
 /def -p0 -mregexp -t'You turn to attack' somebodyhome = /set nobodyhome 0
 
 ; The guards at the staircase will stop you from going down, so need to reset state
-/def -p0 -mregexp -t'The guard prevents you from going down' stoppedbyguards = /set target 5%;/set outofhpcommand /5toinf%;/set outofpucommand /5toinf%;e%;kk
+/def -p0 -mregexp -t'The guard prevents you from going down' stoppedbyguards = \
+     /set target 1%; \
+     /set outofhpcommand /1toinf%; \
+     /set outofpucommand /1toinf%; \
+     w%;s%;s%;w%;kk
 
 /def 1toinf = s%;/abbeytoinf
 /def 2toinf = s%;/1toinf
@@ -61,8 +65,8 @@
 /def 12toinf = e%;n%;n%;n%;n%;n%;n%;u%;/5toinf
 /def 13toinf = w%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
 /def 14toinf = e%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
-/def 15toinf = w%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;/5toinf
-/def 16toinf = e%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
+/def 15toinf = w%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
+/def 16toinf = e%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5toinf
 
 /def infto1 = /inftoabbey%;n
 /def infto2 = /infto1%;n
