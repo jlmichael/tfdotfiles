@@ -27,10 +27,6 @@
      /set outofsp 0%; \
      /set outofpu 0%;
 
-; Gargamel requires using efield right now, so handle it right
-/def -p9 -F -mregexp -t'Syd dealt the killing blow to Gargamel' killedgarg = \
-     /if (efield_up =~ "yes") efield%; /endif%;
-
 /def -p0 -mregexp -t'Syd dealt the killing blow to ' killedone = \
      /set incombat no%; \
      /eval /set nextTarget $[target + 1]%; \

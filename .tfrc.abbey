@@ -22,9 +22,14 @@
 
 /def inftoabbey = /infirmarytoexit%;slide science%;enter%;u%;n%;n%;n%;n%;d%;n%;n%;n%;n%;n%;n%;n%;n%;e%;e%;path
 /def abbeytoinf = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;/sciencetoguild%;e%;u%;u%;n%;n%;e%;/starthealing
+/def abbeytobank = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;/sciencetoguild%;e%;u%;w%;deposit all%;n%;tab%;pab%;tab%;/set outofspace no
+
 
 ; When we kill something, immediately start trying to kill the next thing in the room
 /def -p10 -F -mregexp -t'Syd dealt the killing blow to ' killedone = kk
+
+; If we have run out of room for our chunks of uranium, set a flag
+/def -p0 -mregexp -t'A Chunk of Depleted Uranium is too heavy for' outofspace = /set outofspace yes
 
 ; If there's nothing left in the room, go to the next
 /def -p0 -mregexp -t'There are no valid targets in this area' novalidtarget = \
@@ -34,6 +39,7 @@
      /endif
 
 /def gotonext = \
+     /if (outofspace =~ 'yes') /gotobank%; /comebackfrombank%; /endif%; \
      /eval /set nextTarget $[target + 1]%; \
      /if (nextTarget =~ '17') /set nextTarget 1%; /endif%; \
      /eval /$[target]to$[nextTarget]%; \
@@ -41,6 +47,12 @@
      /eval /set outofhpcommand /$[target]toinf%; \
      /eval /set outofpucommand /$[target]toinf%; \
      kk
+
+/def gotobank = \
+     /eval /$[target]tobank%;
+
+/def comebackfrombank = \
+     s%;e%;u%;n%;n%;e%;/eval /infto$[target]
 
 /def -p0 -mregexp -t'You turn to attack' somebodyhome = /set nobodyhome 0
 
@@ -50,6 +62,23 @@
      /set outofhpcommand /1toinf%; \
      /set outofpucommand /1toinf%; \
      w%;s%;s%;w%;kk
+
+/def 1tobank = s%;/abbeytobank
+/def 2tobank = s%;/1tobank
+/def 3tobank = w%;/1tobank
+/def 4tobank = s%;/3tobank
+/def 5tobank = w%;s%;/4tobank
+/def 6tobank = e%;u%;/5tobank
+/def 7tobank = e%;n%;n%;u%;/5tobank
+/def 8tobank = w%;n%;n%;u%;/5tobank
+/def 9tobank = w%;n%;n%;n%;n%;u%;/5tobank
+/def 10tobank = e%;n%;n%;n%;n%;u%;/5tobank
+/def 11tobank = w%;n%;n%;n%;n%;n%;n%;u%;/5tobank
+/def 12tobank = e%;n%;n%;n%;n%;n%;n%;u%;/5tobank
+/def 13tobank = w%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tobank
+/def 14tobank = e%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tobank
+/def 15tobank = w%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tobank
+/def 16tobank = e%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tobank
 
 /def 1toinf = s%;/abbeytoinf
 /def 2toinf = s%;/1toinf
