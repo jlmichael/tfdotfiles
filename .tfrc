@@ -22,9 +22,6 @@
 /def restorewimpypu = /eval /set wimpyminpu $[wimpyminpu_tmp]
 /def restorewimpysp = /eval /set wimpyminsp $[wimpyminsp_tmp]
 
-; Set up the outofspcommand, which is almost always going to be meditate
-/set outofspcommand meditate
-
 ; HP Bar triggers and stuff
 /set status_fields=hpbar hpbar:30
 /def -p21 -F -mregexp -t'^H\\:([0-9]+)\/([0-9]+) S\\:([0-9]+)\/([0-9]+) P\\:([0-9]+)\/([0-9]+)\(([0-9]+)\) .* Gexp\\:([0-9]+) .* RC\\:([0-9]+)' parsehp = \
@@ -85,7 +82,7 @@
      /set wimpyminhp 0%; \
      /set wimpyminpu 0%; \
      /set healing yes%; \
-     /if ((efield_up =~ "yes") & (use_efield =~ "yes")) efield%; /endif%; \
+     /if ((efield_up =~ "yes") & (use_efield =~ "yes")) efield%;efield%; /endif%; \
      admit myself
 /def stophealing = \
      /restorewimpyhp%; \
@@ -106,6 +103,10 @@
 
 ; Automatically recharge from SPU when admitted to the infirmary
 /def -p0 -mregexp -t'with needles and scalpels. You begin to feel better' recharge = recharge%;/delay 40 recharge%;
+
+; efield is starting to get both more expensive and more necessary.  If it collapses in combat and can't be raised,
+; we need to get out of there.  So treat it as having run out of PU
+/def -p0 -mregexp -t'Power Not Sufficient For Field Activation' cantraisefield = /if (healing !~ "yes") /eval /dowimpy $[outofpucommand]%; /endif%;
 
 ; unidler stuff
 /def doRandomAction = \

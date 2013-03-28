@@ -23,11 +23,6 @@
 	 /set incombat yes%; \
      /endif
 
-/def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
-     gac%;pab%; \
-     /eval /sys echo "You killed %P1 and ran away $[ranaway] times" >> /tmp/mudfeedbot%; \
-     /set ranaway 0
-
 ; uncomment these if you want to heal at infirmary between kills
 ;/def -p0 -mregexp -t'^Syd dealt the killing blow to A' gota = /set target b%;/set incombat no%;/atoinf%;/set outofhpcommand /btoinf%;/set outofpucommand /btoinf
 ;/def -p0 -mregexp -t'^Syd dealt the killing blow to B' gotb = /set target c%;/set incombat no%;/btoinf%;/set outofhpcommand /ctoinf%;/set outofpucommand /ctoinf
