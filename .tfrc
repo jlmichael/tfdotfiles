@@ -12,6 +12,9 @@
 ; Setup dynamic wimpycommand execution
 /def dowimpy = /eval -s0 %{*}
 
+; catch heartbeat death
+/def -p0 -mregexp -t'Game driver tells you: You have no heart beat' restarthb = kickstart
+
 ; store wimpy levels
 /def storewimpyhp = /eval /set wimpyminhp_tmp $[wimpyminhp]
 /def storewimpypu = /eval /set wimpyminpu_tmp $[wimpyminpu]
@@ -63,12 +66,16 @@
 /def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /eval /set hpbar %P0 GXPDiff: $[gxpdiff] RCDiff: $[rcdiff]
 
 ; Kill trigger + notification
-/def -p10 -F -mregexp -t'^Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
-     gac%;pab%; \
-     /eval /sys echo "You killed %P1 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
+/def -p10 -F -mregexp -t'^(Syd|Loki) dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
+     gac%;pab%;dog feed%;dog play%;dog pet%; \
+     /eval /sys echo "%P1 killed %P2 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
      /set outofhp 0%; \
      /set outofsp 0%; \
      /set outofpu 0%;
+
+; corpse farming trigger - individual modules should override the /donatecorpses macro
+/def -p10 -F -mregexp -t'The coffin is full' corpsefarmer = /if (corpsefarming == 1) /donatecorpses%; /endif
+/def donatecorpses = 'I need to do something with all these corpses!
 
 ; Ability triggers, status bookkeeping
 /def -p0 -mregexp -t'Energy Field Collapsing' efieldoff = /set efield_up no

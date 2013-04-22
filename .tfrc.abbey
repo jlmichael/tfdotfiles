@@ -26,7 +26,7 @@
 
 
 ; When we kill something, immediately start trying to kill the next thing in the room
-/def -p10 -F -mregexp -t'Syd dealt the killing blow to ' killedone = kk
+/def -p10 -F -mregexp -t'(Syd|Loki) dealt the killing blow to ' killedone = kk
 
 ; If we have run out of room for our chunks of uranium, set a flag
 /def -p0 -mregexp -t'A Chunk of Depleted Uranium is too heavy for' outofspace = /set outofspace yes

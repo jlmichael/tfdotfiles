@@ -2,7 +2,7 @@
      /set wimpyminhp 100%; \
      /set wimpyminpu 50%; \
      /set wimpypercent 0%; \
-     /set target 19%; \
+     /set target 3%; \
      /set outofhpcommand /1toinf%; \
      /set outofpucommand /1toinf%; \
      /set incombat no%; \
@@ -12,22 +12,37 @@
 /def -p0 -mregexp -t'all of your wounds' donehealing = \
      /stophealing%; \
      /eval /infto$[target]%; \
+     /if (target == 3) mission return papa%;mission ask papa%;mission accept%;/set target 4%;/3to4%; /endif%; \
      /if (incombat =~ "no") kk%;/set incombat yes%; /endif
 
 /def inftosmurfs = /infirmarytoexit%;slide chaos%;enter%;e%;s%;
+/def morguetosmurfs = n%;n%;e%;e%;n%;e%;e%;se%;ap%;slide chaos%;enter%;e%;s%;
 /def smurfstoinf = n%;w%;vortex%;/chaostoguild%;e%;u%;u%;n%;n%;e%;/starthealing
+/def smurfstomorgue = n%;w%;vortex%;/chaostoguild%;slide shop%;w%;s%;w%;s%;s%;s%;e%;s%;w%;w%;s%;s%;
+/def entrytocastle = /entryto10%;s%;s%;s%;s%;s%;s%;s%;s%;
+/def castletoentry = n%;n%;n%;n%;n%;n%;n%;n%;/10toentry%;
 /def inftocastle = /infto10%;s%;s%;s%;s%;s%;s%;s%;s%;
 /def castletoinf = n%;n%;n%;n%;n%;n%;n%;n%;/10toinf%;
 
+; Define a corpse farmer directive
+/def donatecorpses = \
+     /eval /$[target]toentry%; \
+     /smurfstomorgue%; \
+     donate coffin%; \
+     /morguetosmurfs%; \
+     /eval /entryto$[target]
+ 
 ; Override getall because some mobs are in the dark, so we need to turn our light on before getting all
-/def -p10 -F -mregexp -t'Syd dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
-     ion%;gac%;pab%;ioff%; \
-     /eval /sys echo "You killed %P1 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
+/def -p10 -F -mregexp -t'(Syd|Loki) dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
+     ion%;gac%;pab%; \
+     /if (corpsefarming != 1) dog eat%; /else wrap corpse%; /endif%; \
+     ioff%; \
+     /eval /sys echo "%P1 killed %P2 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
      /set outofhp 0%; \
      /set outofsp 0%; \
      /set outofpu 0%;
 
-/def -p0 -mregexp -t'Syd dealt the killing blow to ' killedone = \
+/def -p0 -mregexp -t'(Syd|Loki) dealt the killing blow to ' killedone = \
      /set incombat no%; \
      /eval /set nextTarget $[target + 1]%; \
      /if (nextTarget =~ '36') /set nextTarget 1%; /endif%; \
@@ -117,6 +132,78 @@
 /def 3toinf = n%;/2toinf%;
 /def 2toinf = n%;/1toinf%;
 /def 1toinf = n%;/smurfstoinf%;
+
+/def entryto1 = s
+/def entryto2 = /entryto1%;s
+/def entryto3 = /entryto2%;s
+/def entryto4 = /entryto3%;w
+/def entryto5 = /entryto3%;e
+/def entryto6 = /entryto3%;s
+/def entryto7 = /entryto6%;w
+/def entryto8 = /entryto6%;w
+/def entryto9 = /entryto6%;e
+/def entryto10 = /entryto9%;e%;
+/def entryto11 = /entryto12%;se%;
+/def entryto12 = /entryto9%;sw%;
+/def entryto13 = /entryto11%;w%;
+/def entryto14 = /entryto11%;s%;w%;w%;n%;
+/def entryto15 = /entryto11%;s%;s%;w%;w%;s%;s%;
+/def entryto16 = /entryto11%;s%;s%;s%;e%;s%;s%;
+/def entryto17 = /entrytocastle%;enter%;e%;
+/def entryto18 = /entrytocastle%;enter%;w%;
+/def entryto19 = /entrytocastle%;enter%;s%;
+/def entryto20 = /entryto19%;e%;
+/def entryto21 = /entryto19%;w%;
+/def entryto22 = /entryto19%;s%;e%;
+/def entryto23 = /entryto19%;s%;w%;
+/def entryto24 = /entryto19%;s%;s%;e%;
+/def entryto25 = /entryto19%;s%;s%;w%;
+/def entryto26 = /entryto19%;s%;s%;s%;
+/def entryto27 = /entryto26%;e%;
+/def entryto28 = /entryto26%;w%;
+/def entryto29 = /entryto26%;s%;e%;
+/def entryto30 = /entryto26%;s%;w%;
+/def entryto31 = /entryto26%;s%;s%;
+/def entryto32 = /entryto31%;w%;
+/def entryto33 = /entryto31%;e%;
+/def entryto34 = /entryto10%;s%;s%;s%;s%;
+/def entryto35 = /entryto34%;w%;w%;
+
+/def 35toentry = e%;e%;/34toentry%;
+/def 34toentry = n%;n%;n%;n%;/10toentry%;
+/def 33toentry = w%;/31toentry%;
+/def 32toentry = e%;/31toentry%;
+/def 31toentry = n%;n%;/26toentry%;
+/def 30toentry = e%;n%;/26toentry%;
+/def 29toentry = w%;n%;/26toentry%;
+/def 28toentry = e%;/26toentry%;
+/def 27toentry = w%;/26toentry%;
+/def 26toentry = n%;n%;n%;/19toentry%;
+/def 25toentry = e%;n%;n%;/19toentry%;
+/def 24toentry = w%;n%;n%;/19toentry%;
+/def 23toentry = e%;n%;/19toentry%;
+/def 22toentry = w%;n%;/19toentry%;
+/def 21toentry = e%;/19toentry%;
+/def 20toentry = w%;/19toentry%;
+/def 19toentry = n%;out%;/castletoentry%;
+/def 18toentry = e%;out%;/castletoentry%;
+/def 17toentry = w%;out%;/castletoentry%;
+/def 16toentry = n%;n%;n%;w%;n%;w%;/11toentry%;
+/def 15toentry = n%;n%;n%;e%;e%;n%;/11toentry%;
+/def 14toentry = s%;e%;e%;n%;/11toentry%;
+/def 13toentry = e%;/11toentry%;
+/def 12toentry = ne%;/9toentry%;
+/def 11toentry = nw%;/12toentry%;
+/def 10toentry = w%;/9toentry%;
+/def 9toentry = w%;/6toentry%;
+/def 8toentry = e%;/6toentry%;
+/def 7toentry = /8toentry%;
+/def 6toentry = n%;/3toentry%;
+/def 5toentry = w%;/3toentry%;
+/def 4toentry = e%;/3toentry%;
+/def 3toentry = n%;/2toentry%;
+/def 2toentry = n%;/1toentry%;
+/def 1toentry = n
 
 /def 1to2 = s%;
 /def 2to3 = s%;
