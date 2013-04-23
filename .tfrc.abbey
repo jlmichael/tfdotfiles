@@ -23,7 +23,16 @@
 /def inftoabbey = /infirmarytoexit%;slide science%;enter%;u%;n%;n%;n%;n%;d%;n%;n%;n%;n%;n%;n%;n%;n%;e%;e%;path
 /def abbeytoinf = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;/sciencetoguild%;e%;u%;u%;n%;n%;e%;/starthealing
 /def abbeytobank = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;/sciencetoguild%;e%;u%;w%;deposit all%;n%;tab%;pab%;tab%;/set outofspace no
+/def abbeytomorgue = path%;w%;w%;s%;s%;s%;s%;s%;s%;s%;s%;u%;s%;s%;s%;s%;d%;out%;w%;w%;s%;s%;s%;s%;w%;w%;s%;w%;w%;s%;s%;
+/def morguetoabbey = n%;n%;e%;e%;n%;e%;e%;se%;ap%;e%;u%;u%;n%;n%;e%;/inftoabbey
 
+/def -p10 -F -mregexp -t'(Syd|Loki) dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
+     gac%;pab%; \
+     /if (corpsefarming != 1) dog eat%; /else wrap corpse%; /endif%; \
+     /eval /sys echo "%P1 killed %P2 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
+     /set outofhp 0%; \
+     /set outofsp 0%; \
+     /set outofpu 0%;
 
 ; When we kill something, immediately start trying to kill the next thing in the room
 /def -p10 -F -mregexp -t'(Syd|Loki) dealt the killing blow to ' killedone = kk
@@ -54,6 +63,11 @@
 /def comebackfrombank = \
      s%;e%;u%;n%;n%;e%;/eval /infto$[target]
 
+; Define a corpse farmer directive
+/def donatecorpses = \
+     /eval /$[target]tomorgue%; \
+     donate coffin%; \
+     /eval /morgueto$[target]
 /def -p0 -mregexp -t'You turn to attack' somebodyhome = /set nobodyhome 0
 
 ; The guards at the staircase will stop you from going down, so need to reset state
@@ -113,6 +127,40 @@
 /def infto14 = /infto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;w
 /def infto15 = /infto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;s%;s%;e
 /def infto16 = /infto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;s%;s%;w
+
+/def 1tomorgue = s%;/abbeytomorgue
+/def 2tomorgue = s%;/1tomorgue
+/def 3tomorgue = w%;/1tomorgue
+/def 4tomorgue = s%;/3tomorgue
+/def 5tomorgue = w%;s%;/4tomorgue
+/def 6tomorgue = e%;u%;/5tomorgue
+/def 7tomorgue = e%;n%;n%;u%;/5tomorgue
+/def 8tomorgue = w%;n%;n%;u%;/5tomorgue
+/def 9tomorgue = w%;n%;n%;n%;n%;u%;/5tomorgue
+/def 10tomorgue = e%;n%;n%;n%;n%;u%;/5tomorgue
+/def 11tomorgue = w%;n%;n%;n%;n%;n%;n%;u%;/5tomorgue
+/def 12tomorgue = e%;n%;n%;n%;n%;n%;n%;u%;/5tomorgue
+/def 13tomorgue = w%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tomorgue
+/def 14tomorgue = e%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tomorgue
+/def 15tomorgue = w%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tomorgue
+/def 16tomorgue = e%;n%;n%;n%;n%;n%;n%;n%;n%;n%;n%;u%;/5tomorgue
+
+/def morgueto1 = /morguetoabbey%;n
+/def morgueto2 = /morgueto1%;n
+/def morgueto3 = /morgueto1%;e
+/def morgueto4 = /morgueto3%;n
+/def morgueto5 = /morgueto4%;n%;e
+/def morgueto6 = /morgueto5%;d%;w
+/def morgueto7 = /morgueto5%;d%;s%;s%;w
+/def morgueto8 = /morgueto5%;d%;s%;s%;e
+/def morgueto9 = /morgueto5%;d%;s%;s%;s%;s%;e
+/def morgueto10 = /morgueto5%;d%;s%;s%;s%;s%;w
+/def morgueto11 = /morgueto5%;d%;s%;s%;s%;s%;s%;s%;e
+/def morgueto12 = /morgueto5%;d%;s%;s%;s%;s%;s%;s%;w
+/def morgueto13 = /morgueto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;e
+/def morgueto14 = /morgueto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;w
+/def morgueto15 = /morgueto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;s%;s%;e
+/def morgueto16 = /morgueto5%;d%;s%;s%;s%;s%;s%;s%;s%;s%;s%;s%;w
 
 /def 1to2 = n
 /def 2to3 = s%;e

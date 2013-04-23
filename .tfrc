@@ -26,7 +26,10 @@
 /def restorewimpysp = /eval /set wimpyminsp $[wimpyminsp_tmp]
 
 ; HP Bar triggers and stuff
-/set status_fields=hpbar hpbar:30
+/set status_fields=hpbar
+/set status_height 2
+/status_add -r1 -c doghpbar
+
 /def -p21 -F -mregexp -t'^H\\:([0-9]+)\/([0-9]+) S\\:([0-9]+)\/([0-9]+) P\\:([0-9]+)\/([0-9]+)\(([0-9]+)\) .* Gexp\\:([0-9]+) .* RC\\:([0-9]+)' parsehp = \
      /set curhp %P1%; \
      /set maxhp %P2%; \
@@ -64,10 +67,11 @@
      /endif
 
 /def -p10 -ag -mregexp -t'^H\\:.*$' hptracker = /eval /set hpbar %P0 GXPDiff: $[gxpdiff] RCDiff: $[rcdiff]
+/def -p10 -ag -mregexp -t'^Loki :: (.*)$' doghptracker = /eval /set doghpbar Loki :: %P1   
 
 ; Kill trigger + notification
 /def -p10 -F -mregexp -t'^(Syd|Loki) dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
-     gac%;pab%;dog feed%;dog play%;dog pet%; \
+     gac%;pab%;dog eat%;dog play%;dog pet%; \
      /eval /sys echo "%P1 killed %P2 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
      /set outofhp 0%; \
      /set outofsp 0%; \
@@ -76,6 +80,10 @@
 ; corpse farming trigger - individual modules should override the /donatecorpses macro
 /def -p10 -F -mregexp -t'The coffin is full' corpsefarmer = /if (corpsefarming == 1) /donatecorpses%; /endif
 /def donatecorpses = 'I need to do something with all these corpses!
+
+; Feed the dog when he needs it if we are carrying corpses
+/def -p0 -mregexp -t'Samoyed looks around for something to eat but finds nothing' givethedogabone = \
+     /if (feeddogwhenhungry == 1) uc%; /endif
 
 ; Ability triggers, status bookkeeping
 /def -p0 -mregexp -t'Energy Field Collapsing' efieldoff = /set efield_up no
@@ -143,3 +151,13 @@
 /def -p0 -F -mregexp -t'([a-zA-Z]+) \[Gen-Alpha\] : (.*)$' reportcomm = /sys echo "%P1 comm'd: %P2" >> /tmp/mudfeedbot%;
 /def fromfile = /quote -dexec !"cat /tmp/deeftobdum"%;
 /repeat -5 1 /fromfile
+
+; Add herbologist macros
+/def harvestall = harvest grass%;harvest trees%;harvest forest%;harvest plant%;harvest tree%;harvest flower%;harvest weed%;harvest weeds
+/bind ^h = /harvestall
+/def -b'^B' = get herb from backpack 2%;keep herb%;eat herb
+
+; Add some color!
+/def -p0 -F -aCrgb225 -mregexp -t'\(worn'
+/def -p0 -F -aCrgb225 -mregexp -t'\(wielded'
+/def -p0 -F -aCrgb400 -t'An adrenaline surge flows through you'
