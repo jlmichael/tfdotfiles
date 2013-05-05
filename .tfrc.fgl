@@ -1,0 +1,190 @@
+/def start = \
+     /set wimpyminhp 150%; \
+     /set wimpyminpu 150%; \
+     /set wimpyminsp 20%; \
+     /set wimpyminhp_tmp 150%; \
+     /set wimpyminpu_tmp 150%; \
+     /set wimpyminsp_tmp 20%; \
+     /set wimpypercent 0%; \
+     /set target 1%; \
+     /set outofhpcommand /1toinf%; \
+     /set outofpucommand /1toinf%; \
+     /set outofhp 0%; \
+     /set outofpu 0%; \
+     /set outofsp 0%; \
+     /set incombat no%; \
+     /starthealing
+
+/def -p0 -mregexp -t'all of your wounds' donehealing = \
+     /stophealing%; \
+     /eval /infto$[target]%; \
+     /if (incombat =~ "no") kk%;/set incombat yes%; /endif
+
+/def -p10 -F -mregexp -t'(Syd|Loki) dealt the killing blow to ([a-zA-Z0-9 ]+)' getall = \
+     gac%;pab%; \
+     /if (corpsefarming != 1) dog eat%; /else wrap corpse%; /endif%; \
+     /eval /sys echo "%P1 killed %P2 and ran out of hp:pu:sp $[outofhp]:$[outofpu]:$[outofsp] times" >> /tmp/mudfeedbot%; \
+     /set outofhp 0%; \
+     /set outofsp 0%; \
+     /set outofpu 0%;
+
+; When we kill something, immediately start trying to kill the next thing in the room
+/def -p10 -F -mregexp -t'(Syd|Loki) dealt the killing blow to ' killedone = kk
+
+; If we have run out of room for our chunks of uranium, set a flag
+/def -p0 -mregexp -t' is too heavy for' outofspace = /set outofspace yes
+
+; If there's nothing left in the room, go to the next
+/def -p0 -mregexp -t'There are no valid targets in this area' novalidtarget = \
+     /eval /set nobodyhome $[nobodyhome + 1]%; \
+     /if (nobodyhome < 22) /gotonext%; \
+     /else /eval /sys echo "Crap - got 22 nobody homes in a row, might be in an indeterminate state!" >> /tmp/mudfeedbot%; \
+     /endif
+
+/def gotonext = \
+     /if (outofspace =~ 'yes') /gotobank%; /comebackfrombank%; /endif%; \
+     /eval /set nextTarget $[target + 1]%; \
+     /if (nextTarget =~ '23') /set nextTarget 1%; /endif%; \
+     /eval /$[target]to$[nextTarget]%; \
+     /eval /set target $[nextTarget]%; \
+     /eval /set outofhpcommand /$[target]toinf%; \
+     /eval /set outofpucommand /$[target]toinf%; \
+     kk
+
+/def gotobank = \
+     /eval /$[target]toentry%; \
+     /fgltobank%;
+
+/def comebackfrombank = \
+     s%;e%;u%;n%;n%;e%;/eval /infto$[target]
+
+; Define a corpse farmer directive
+/def donatecorpses = \
+     /eval /$[target]toentry%; \
+     fgltomorgue%; \
+     donate coffin%; \
+     /morguetofgl%; \
+     /eval /entryto$[target]
+
+/def -p0 -mregexp -t'You turn to attack' somebodyhome = /set nobodyhome 0
+
+/def inftofgl = /infirmarytoexit%;slide fantasy%;portal road%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;e%;s%;s%;enter
+/def fgltoinf = leave%;n%;n%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;portal%;/fantasytoinf
+/def fgltomorgue = leave%;n%;n%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;portal%;/fantasytoguild%;slide surface%;nw%;w%;w%;s%;w%;w%;s%;s
+/def fgltobank = leave%;n%;n%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;w%;portal%;/fantasytoguild%;e%;u%;w%;deposit all%;n%;tab%;pab%;tab%;/set outofspace no
+/def morguetofgl = n%;n%;e%;e%;n%;e%;e%;se%;ap%;e%;u%;u%;n%;n%;e%;/inftofgl
+
+/def entryto2 = n
+/def entryto3 = /entryto2%;nw
+/def entryto4 = /entryto3%;n
+/def entryto5 = /entryto4%;n
+/def entryto6 = /entryto5%;nw
+/def entryto7 = /entryto6%;w
+/def entryto8 = /entryto6%;d
+/def entryto9 = /entryto8%;n
+/def entryto10 = /entryto9%;n
+/def entryto11 = /entryto2%;ne
+/def entryto12 = /entryto11%;n
+/def entryto13 = /entryto12%;n
+/def entryto14 = /entryto13%;nw
+/def entryto15 = /entryto14%;n
+/def entryto16 = /entryto15%;n
+/def entryto17 = /entryto16%;d
+/def entryto18 = /entryto17%;n
+/def entryto19 = /entryto18%;nw
+/def entryto20 = /entryto19%;ne
+/def entryto21 = /entryto18%;ne
+/def entryto22 = /entryto20%;s
+
+/def 2toentry = s
+/def 3toentry = se%;/2toentry
+/def 4toentry = s%;/3toentry
+/def 5toentry = s%;/4toentry
+/def 6toentry = se%;/5toentry
+/def 7toentry = e%;/6toentry
+/def 8toentry = u%;/6toentry
+/def 9toentry = s%;/8toentry
+/def 10toentry = s%;/9toentry
+/def 11toentry = sw%;/2toentry
+/def 12toentry = s%;/11toentry
+/def 13toentry = s%;/12toentry
+/def 14toentry = se%;/13toentry
+/def 15toentry = s%;/14toentry
+/def 16toentry = s%;/15toentry
+/def 17toentry = u%;/16toentry
+/def 18toentry = s%;/17toentry
+/def 19toentry = se%;/18toentry
+/def 20toentry = sw%;/19toentry
+/def 21toentry = sw%;/18toentry
+/def 22toentry = n%;/20toentry
+
+/def 1to2 = n
+/def 2to3 = nw
+/def 3to4 = n
+/def 4to5 = n
+/def 5to6 = nw
+/def 6to7 = w
+/def 7to8 = e%;d
+/def 8to9 = n
+/def 9to10 = n
+/def 10to11 = s%;s%;u%;se%;s%;s%;se%;ne
+/def 11to12 = n
+/def 12to13 = n
+/def 13to14 = nw
+/def 14to15 = n
+/def 15to16 = n
+/def 16to17 = d
+/def 17to18 = n
+/def 18to19 = nw
+/def 19to20 = ne
+/def 20to21 = se
+/def 21to22 = nw%;s
+/def 22to1 = n%;se%;sw%;s%;u%;s%;s%;se%;s%;s%;sw%;s
+
+/def infto1 = /inftofgl
+/def infto2 = /inftofgl%;/entryto2
+/def infto3 = /inftofgl%;/entryto3
+/def infto4 = /inftofgl%;/entryto4
+/def infto5 = /inftofgl%;/entryto5
+/def infto6 = /inftofgl%;/entryto6
+/def infto7 = /inftofgl%;/entryto7
+/def infto8 = /inftofgl%;/entryto8
+/def infto9 = /inftofgl%;/entryto9
+/def infto10 = /inftofgl%;/entryto10
+/def infto11 = /inftofgl%;/entryto11
+/def infto12 = /inftofgl%;/entryto12
+/def infto13 = /inftofgl%;/entryto13
+/def infto14 = /inftofgl%;/entryto14
+/def infto15 = /inftofgl%;/entryto15
+/def infto16 = /inftofgl%;/entryto16
+/def infto17 = /inftofgl%;/entryto17
+/def infto18 = /inftofgl%;/entryto18
+/def infto19 = /inftofgl%;/entryto19
+/def infto20 = /inftofgl%;/entryto20
+/def infto21 = /inftofgl%;/entryto21
+/def infto22 = /inftofgl%;/entryto22
+
+/def 1toinf = /fgltoinf
+/def 2toinf = /2toentry%;/fgltoinf
+/def 3toinf = /3toentry%;/fgltoinf
+/def 4toinf = /4toentry%;/fgltoinf
+/def 5toinf = /5toentry%;/fgltoinf
+/def 6toinf = /6toentry%;/fgltoinf
+/def 7toinf = /7toentry%;/fgltoinf
+/def 8toinf = /8toentry%;/fgltoinf
+/def 9toinf = /9toentry%;/fgltoinf
+/def 10toinf = /10toentry%;/fgltoinf
+/def 11toinf = /11toentry%;/fgltoinf
+/def 12toinf = /12toentry%;/fgltoinf
+/def 13toinf = /13toentry%;/fgltoinf
+/def 14toinf = /14toentry%;/fgltoinf
+/def 15toinf = /15toentry%;/fgltoinf
+/def 16toinf = /16toentry%;/fgltoinf
+/def 17toinf = /17toentry%;/fgltoinf
+/def 18toinf = /18toentry%;/fgltoinf
+/def 19toinf = /19toentry%;/fgltoinf
+/def 20toinf = /20toentry%;/fgltoinf
+/def 21toinf = /21toentry%;/fgltoinf
+/def 22toinf = /22toentry%;/fgltoinf
+
+
