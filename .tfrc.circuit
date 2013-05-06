@@ -1,0 +1,35 @@
+; The ciruit - This set of triggers will walk us through our favorite areas, clearing each in order.
+;              When one is clear, we head back to the guild and set up for the next one. Modules need
+; 	       to conform to the expected format: they must maintain a var called target that indicates
+; 	       the current room, and they must make use of $[target]toentry and entrytoinf macros.
+
+; Store our list of areas
+/set area1 abbey
+/set area2 smurfs
+/set area3 temple
+/set area4 fgl
+/def setnextarea = \
+     /echo Updating nextarea...%; \
+     /eval /set areanum $[areanum + 1]%; \
+     /if (areanum =~ '5') /set areanum 1%; /endif%; \
+     /eval /test nextarea := area$[areanum]%; \
+     /eval /echo nextarea is now $[nextarea]
+
+; start the circuit
+/def startcircuit = \
+     /set areanum 1%; \
+     /set nextarea abbey%; \
+     /eval /load ~/tfdotfiles/.tfrc.$[nextarea]%; \
+     /start
+
+; modules must emit the pope command when an area has been cleared.  Trigger off that to head back to guild and reconfigure.
+/def -p0 -mregexp -t'You tell everyone to stop it or they\'ll go blind' nextarea = \
+     /eval /$[target]toentry%; \
+     /entrytoinf%; \
+     /setnextarea%; \
+     /purge%; \
+     /load ~/.tfrc%; \
+     /load ~/tfdotfiles/.tfrc.circuit%; \
+     /eval /load ~/tfdotfiles/.tfrc.$[nextarea]%; \
+     /start
+  
